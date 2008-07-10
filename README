@@ -1,0 +1,9 @@
+This is a small standalone library that's API-compatible with Justin Azoff's MogileFS library (http://www.albany.edu/~ja6447/mogilefs.py) yet writes to the local filesystem instead of a full Mogile cluster.
+
+Why would anyone want to use a library that's basically just a thin wrapper around Python's file handling functions?
+
+Because oftentimes you start a website without knowing whether it'll be a big hit or not, yet want to be able to quickly upgrade to a more scalable solution if you hit it big.  This library lets you program against the MogileFS Python client without setting up a full MogileFS system, and then just swap a few imports or rename a Python library when you need to scale.  This way, you can avoid all the configuration and installation time for Mogile when you're small and don't yet know what you're doing, yet avoid rearchitecting the app if you do need it.
+
+It may also be convenient for setting up individual developer environments for a large MogileFS-based project: each developer can program against this library and doesn't need a full Mogile setup.
+
+Doctests and documentation inline; it's somewhat more complete than the Python client or even the official Perl client, which may make this useful for learning to setup Mogile.
