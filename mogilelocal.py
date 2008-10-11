@@ -24,6 +24,9 @@ class MogileFSError(Exception):
     pass
 
 class Client:
+    """
+    The main MogileFS client.  This is the interface to the filestore.
+    """
 
     def __init__(self, dir, url):
         """
@@ -65,6 +68,10 @@ class Client:
         self.verify_repcount = False
 
     def reload(self):
+        """
+        Reinitialize the MogileFS client, resetting all variables (except
+        internal MogileLocal implementation details) to their defaults.
+        """
         return self.__init__(self.dir, self.url)
 
     def _ensure_dirs_exist(self, key):
@@ -245,12 +252,27 @@ class Client:
             return self.croak('IO error deleting file %s: %s' % (key, str(e)))
 
     def delete_small(self, key):
+        """
+        Deletes a single-chunk file.  In MogileLocal, there's no distinction
+        between 'small' and 'big' files, so this is exactly the same as
+        `delete`.  However, the real MogileFS system has a distinction between
+        'small' files (those that fit in a single chunk) and 'big' files
+        (those that are split across machines).  Use delete_small, rename_small
+        on normal files, and delete_big, rename_big on those created by
+        send_bigfile.
+        """
         return self.delete(key)
 
     def delete_big(self, key):
+        """
+        Deletes a muli-chunk file.
+        """
         return self.delete(key)
 
     def rename(self, fkey, tkey):
+        """
+        Rename a file from `fkey` to `tkey`.
+        """
         try:
             if fkey in self:
                 os.rename(self._real_path(fkey), self._real_path(tkey))
@@ -262,9 +284,15 @@ class Client:
                     (fkey, tkey, str(e)))
 
     def rename_small(self, fkey, tkey):
+        """
+        Rename a single-chunk file.
+        """
         return self.rename(fkey, tkey)
 
     def rename_big(self, key, tkey):
+        """
+        Rename all chunks of a multi-chunk file.
+        """
         return self.rename(fkey, tkey)
 
     def get_paths(self, key, noverify=0, zone=None):
@@ -384,6 +412,10 @@ class Client:
         pass
 
     def cat(self, key, fp=sys.stdout, big=False):
+        """
+        Writes the file specified by `key` to the file descriptor `fp` (default
+        of sys.stdout).  `big` should be set to True for multi-chunk files.
+        """
         if big:
             for part in self.get_bigfile_iter(key):
                 fp.write(part)
@@ -412,6 +444,9 @@ class Client:
 
     def send_bigfile(self, key, source, clas=None, 
                     description="", overwrite=True, chunksize=1024*1024*16):
+        """
+        Sends the file-like object `source` to Mogile, storing it as `key`.
+        """
         if not overwrite and key in self:
             self.choke("pre file or info file for %s already exists" % key)
 
@@ -452,12 +487,18 @@ class Client:
             yield chunk
 
     def get_bigfile_as_lines(self, key):
+        """
+        Gets a bigfile as a generator of lines.
+        """
         fp = self.get_bigfile_as_file(key)
         for line in fp:
             yield line
         fp.close()
 
     def get_bigfile_as_file(self, key):
+        """
+        Gets a bigfile as a file-like object.
+        """
         return open(self._real_path(key))
 
 class Admin:
