@@ -21,11 +21,18 @@ import os, glob, md5, shutil, sys, urlparse
 from os import path as osp
 
 class MogileFSError(Exception):
+    """
+    Exception class for all MogileFS errors.
+    """
     pass
 
 class Client:
     """
     The main MogileFS client.  This is the interface to the filestore.
+
+    This implements most of the dictionary interface (contains, getitem,
+    setitem, delitem, iter), and that's the preferred interface if you
+    don't need to deal with bigfiles or storage classes.
     """
 
     def __init__(self, dir, url):
