@@ -31,7 +31,7 @@ class Client:
     The main MogileFS client.  This is the interface to the filestore.
 
     This implements most of the dictionary interface (contains, getitem,
-    setitem, delitem, iter), and that's the preferred interface if you
+    setitem, delitem, and iter), and that's the preferred interface if you
     don't need to deal with bigfiles or storage classes.
     """
 
@@ -42,6 +42,10 @@ class Client:
         to that directory.  No trailing slash on either.
 
         >>> fsh = _make_test_client()
+
+        Here, _make_test_client is a helper function that just returns 
+        Client('/tmp/mogilelocal', 'http://localhost/mogilelocal'), for easy
+        doctesting.
 
         >>> fsh.dir
         '/tmp/mogilelocal'
