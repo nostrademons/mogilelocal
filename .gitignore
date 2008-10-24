@@ -1,0 +1,9 @@
+*.pyc
+*.swp
+*.swo
+*~
+*.egg-info
+*.tar.gz
+apidocs
+dist
+build

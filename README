@@ -1,4 +1,4 @@
-This is a small standalone library that's API-compatible with Justin Azoff's MogileFS library (http://www.albany.edu/~ja6447/mogilefs.py) yet writes to the local filesystem instead of a full Mogile cluster.
+This is a small standalone library that's API-compatible with Justin Azoff's MogileFS library (http://www.albany.edu/~ja6447/mogilefs.py) yet writes to the local filesystem instead of a full Mogile cluster.  Installation is either as a single file ('mogilelocal.py'), or through "easy_install mogilelocal".
 
 Why would anyone want to use a library that's basically just a thin wrapper around Python's file handling functions?
 
